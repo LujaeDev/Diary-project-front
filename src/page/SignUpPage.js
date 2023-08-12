@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
+import React, { useState } from "react";
 
 function Copyright(props) {
   return (
@@ -37,9 +39,12 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const [isSigndup, setIsSignedUp] = useState(false);
+
   //제출시 서버와 통신
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
 
     const formData = {
@@ -52,10 +57,20 @@ export default function SignUp() {
     console.log(formData);
 
     axios
-      .post("/api/signUp", formData)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
+      .post("/api/signup", formData)
+      .then((response) => {
+        console.log(response.data.success);
+
+        const success = JSON.parse(response.data.success);
+        console.log(success);
+        setIsSignedUp(success);
+      })
+      .catch((error) => console.log("error: " + error));
   };
+
+  if (isSigndup) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

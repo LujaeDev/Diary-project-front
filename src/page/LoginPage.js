@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,9 +12,8 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-//
-function handleLogin() {}
+import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -39,14 +38,34 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage() {
+  const [isLogined, setIsLogined] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    const formData = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+
+    console.log(formData);
+
+    axios
+      .post("/api/signIn", formData)
+      .then((response) => {
+        console.log(response.data.success);
+
+        const success = JSON.parse(response.data.success);
+        console.log(success);
+        setIsLogined(success);
+      })
+      .catch((error) => console.log("error: " + error));
   };
+
+  if (isLogined) {
+    return <Navigate to="/main" />;
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>

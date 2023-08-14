@@ -38,9 +38,9 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function LoginPage() {
+export default function SignInPage() {
   //0: initial state, 1: success, 2: faii
-  const [isLogined, setIsLogined] = useState(0);
+  const [isSignedIn, setisSignedIn] = useState(0);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -61,18 +61,18 @@ export default function LoginPage() {
         const success = JSON.parse(response.data.success);
         console.log("succes = " + success);
 
-        if (success) setIsLogined(1);
-        else setIsLogined(2);
+        if (success) setisSignedIn(1);
+        else setisSignedIn(2);
       })
       .catch((error) => console.log("error: " + error));
   };
 
   function setInitModalState() {
-    setIsLogined(0);
+    setisSignedIn(0);
   }
 
   function showModal() {
-    if (isLogined === 2) {
+    if (isSignedIn === 2) {
       return (
         <MyModal
           title="Fail"
@@ -84,7 +84,7 @@ export default function LoginPage() {
     }
   }
 
-  if (isLogined === 1) {
+  if (isSignedIn === 1) {
     return <Navigate to="/main" />;
   }
 

@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import MyModal from "../components/MyModal";
 
 function Copyright(props) {
   return (
@@ -38,7 +39,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage() {
-  const [isLogined, setIsLogined] = useState(false);
+  //0: initial state, 1: success, 2: faii
+  const [isLogined, setIsLogined] = useState(0);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -54,16 +56,35 @@ export default function LoginPage() {
     axios
       .post("/api/signIn", formData)
       .then((response) => {
-        console.log(response.data.success);
+        console.log(response.data);
 
         const success = JSON.parse(response.data.success);
-        console.log(success);
-        setIsLogined(success);
+        console.log("succes = " + success);
+
+        if (success) setIsLogined(1);
+        else setIsLogined(2);
       })
       .catch((error) => console.log("error: " + error));
   };
 
-  if (isLogined) {
+  function setInitModalState() {
+    setIsLogined(0);
+  }
+
+  function showModal() {
+    if (isLogined === 2) {
+      return (
+        <MyModal
+          title="Fail"
+          handleClose={setInitModalState}
+          content="Fail to Sign in. please Check your input."
+          caller="SignInPage"
+        ></MyModal>
+      );
+    }
+  }
+
+  if (isLogined === 1) {
     return <Navigate to="/main" />;
   }
 
@@ -158,6 +179,7 @@ export default function LoginPage() {
             </Box>
           </Box>
         </Grid>
+        {showModal()}
       </Grid>
     </ThemeProvider>
   );

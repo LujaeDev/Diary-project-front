@@ -12,7 +12,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Avatar } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import Home from "@mui/icons-material/Home";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function MainPage() {
   const drawer = <SideBar />;
@@ -25,6 +27,31 @@ function MainPage() {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.defaults.headers.common["Authorization"] =
+      localStorage.getItem("token");
+
+    // Axios GET 요청 보내기
+
+    axios
+      .get("/api/main")
+      .then((response) => {
+        // 성공적인 응답 처리
+        console.log("Response:", response.data);
+      })
+      .catch((error) => {
+        // 에러 핸들링 및 로그인 페이지로 리디렉션
+        console.error("Error: ", error);
+
+        if (error.response && error.response.status === 401) {
+          // 만약 에러 상태 코드가 401(Unauthorized)이면 로그인 페이지로 리디렉션
+          navigate("/"); // '/login'은 로그인 페이지의 경로로 수정해야 합니다.
+        }
+      });
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>

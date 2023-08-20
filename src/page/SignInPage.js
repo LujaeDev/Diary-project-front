@@ -56,13 +56,20 @@ export default function SignInPage() {
     axios
       .post("/api/signIn", formData)
       .then((response) => {
+        const token = response.data.data;
+        console.log(token);
         console.log(response.data);
 
         const success = JSON.parse(response.data.success);
         console.log("succes = " + success);
 
-        if (success) setisSignedIn(1);
-        else setisSignedIn(2);
+        if (success) {
+          setisSignedIn(1);
+          console.log("Bearer " + token.accessToken);
+          localStorage.setItem("token", "Bearer " + token.accessToken);
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + token.accessToken;
+        } else setisSignedIn(2);
       })
       .catch((error) => console.log("error: " + error));
   };

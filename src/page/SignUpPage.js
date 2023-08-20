@@ -60,11 +60,17 @@ export default function SignUp() {
       .post("/api/signUp", formData)
       .then((response) => {
         console.log(response.data.success);
+        const token = response.data.data;
 
         const success = JSON.parse(response.data.success);
 
-        if (success) setIsSignedUp(1);
-        else setIsSignedUp(2);
+        if (success) {
+          setIsSignedUp(1);
+          console.log("Bearer " + token.accessToken);
+          localStorage.setItem("token", "Bearer " + token.accessToken);
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + token.accessToken;
+        } else setIsSignedUp(2);
       })
       .catch((error) => console.log("error: " + error));
   };

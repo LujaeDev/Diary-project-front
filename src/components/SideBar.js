@@ -20,6 +20,10 @@ import StarIcon from "@mui/icons-material/Star";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ModeIcon from "@mui/icons-material/Mode";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
+import StarBorderPurple500TwoToneIcon from "@mui/icons-material/StarBorderPurple500TwoTone";
 
 function appBarLabel(label) {
   return (
@@ -43,6 +47,28 @@ const darkTheme = createTheme({
 });
 
 function SideBar(props) {
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  const listItems = [
+    { icon: <Home />, primary: "Home" },
+    { icon: <PlaylistAddCheckIcon />, primary: "Daily task" },
+    {
+      icon: <StarIcon />,
+      primary: "Goal",
+      nestedItems: [
+        { icon: <StarBorderPurple500TwoToneIcon />, primary: "Weekly Goal" },
+        { icon: <StarBorderPurple500TwoToneIcon />, primary: "Monthly Goal" },
+        { icon: <StarBorderPurple500TwoToneIcon />, primary: "Annual Goal" },
+      ],
+    },
+    { icon: <ModeIcon />, primary: "Diary" },
+    { icon: <CalendarMonthIcon />, primary: "Calendar" },
+  ];
+
   const icons = [
     <Home />,
     <PlaylistAddCheckIcon />,
@@ -51,7 +77,7 @@ function SideBar(props) {
     <CalendarMonthIcon />,
   ];
 
-  const drawer = (
+  return (
     <div style={{ height: "100%" }}>
       <ThemeProvider theme={darkTheme}>
         <AppBar position="static" color="primary">
@@ -60,7 +86,32 @@ function SideBar(props) {
       </ThemeProvider>
       <Divider />
       <List>
-        {["Home", "Daily task", "Goal", "Diary", "Calendar"].map(
+        {listItems.map((item, index) => (
+          <div key={index}>
+            <ListItemButton
+              onClick={item.nestedItems ? handleClick : undefined}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.primary} />
+              {item.nestedItems && (open ? <ExpandLess /> : <ExpandMore />)}
+            </ListItemButton>
+
+            {item.nestedItems && (
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {item.nestedItems.map((nestedItem, nestedIndex) => (
+                    <ListItemButton key={nestedIndex} sx={{ pl: 4 }}>
+                      <ListItemIcon>{nestedItem.icon}</ListItemIcon>
+                      <ListItemText primary={nestedItem.primary} />
+                    </ListItemButton>
+                  ))}
+                </List>
+              </Collapse>
+            )}
+          </div>
+        ))}
+
+        {/* {["Home", "Daily task", "Goal", "Diary", "Calendar"].map(
           (text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
@@ -71,12 +122,10 @@ function SideBar(props) {
               </ListItemButton>
             </ListItem>
           )
-        )}
+        )} */}
       </List>
     </div>
   );
-
-  return drawer;
 }
 
 export default SideBar;

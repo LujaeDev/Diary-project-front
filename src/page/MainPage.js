@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function MainPage() {
-  const drawer = <SideBar />;
+  const drawer = <SideBar title="Home" />;
   const container =
     window !== undefined ? () => window.document.body : undefined;
   const drawerWidth = 250;

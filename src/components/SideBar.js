@@ -5,7 +5,6 @@ import AppBar from "@mui/material/AppBar";
 import Divider from "@mui/material/Divider";
 
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -30,6 +29,7 @@ import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
+import { Link, Navigate } from "react-router-dom";
 
 const drawerWidth = 250;
 
@@ -68,9 +68,18 @@ function SideBar(props) {
     setOpen(!open);
   };
 
+  const hanldeHomeBtn = () => {
+    console.log("home btn");
+    return <Navigate to="/main" />;
+  };
+
   const listItems = [
-    { icon: <Home />, primary: "Home" },
-    { icon: <PlaylistAddCheckIcon />, primary: "Daily task" },
+    { icon: <Home />, primary: "Home", ref: "/main" },
+    {
+      icon: <PlaylistAddCheckIcon />,
+      primary: "Daily task",
+      ref: "/dailyTask",
+    },
     {
       icon: <StarIcon />,
       primary: "Goal",
@@ -93,13 +102,18 @@ function SideBar(props) {
       <List>
         {listItems.map((item, index) => (
           <div key={index}>
-            <ListItemButton
-              onClick={item.nestedItems ? handleClick : undefined}
+            <Link
+              to={item.ref}
+              style={{ color: "inherit", textDecoration: "none" }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.primary} />
-              {item.nestedItems && (open ? <ExpandLess /> : <ExpandMore />)}
-            </ListItemButton>
+              <ListItemButton
+                onClick={item.nestedItems ? handleClick : item.btnNavigate}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.primary} />
+                {item.nestedItems && (open ? <ExpandLess /> : <ExpandMore />)}
+              </ListItemButton>
+            </Link>
 
             {item.nestedItems && (
               <Collapse in={open} timeout="auto" unmountOnExit>

@@ -6,7 +6,7 @@ function ListItmeContainer(props) {
   const handleClick = (index) => {
     console.log(index + " delete!");
     console.log(props.item.habitType);
-    props.deleteHabitHandler.bind(props.item.habitId, props.item.habitType);
+    props.deleteHabitHandler(props.item.habitId, props.item.habitType);
   };
 
   return (
@@ -16,13 +16,15 @@ function ListItmeContainer(props) {
         backgroundColor: props.background,
         borderRadius: 10,
         marginBottom: 2,
+        height: 35,
+        border: "1px solid black",
       }}
     >
       <ListItemText
         primary={props.index + 1 + ". " + props.item.content}
       ></ListItemText>
       <IconButton onClick={() => handleClick(props.item.habitId)} size="small">
-        <RemoveCircleOutlineIcon />
+        <RemoveCircleOutlineIcon sx={{ fontSize: 20 }} />
       </IconButton>
     </ListItem>
   );

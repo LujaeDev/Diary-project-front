@@ -1,14 +1,14 @@
-import { createTheme } from "@mui/material/styles";
-import { ThemeProvider } from "@mui/material/styles";
 import { ListItem, ListItemText } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { IconButton } from "@mui/material";
 
-function handleClick() {
-  console.log("delete!");
-}
-
 function ListItmeContainer(props) {
+  const handleClick = (index) => {
+    console.log(index + " delete!");
+    console.log(props.item.habitType);
+    props.deleteHabitHandler.bind(props.item.habitId, props.item.habitType);
+  };
+
   return (
     <ListItem
       key={props.index}
@@ -18,8 +18,10 @@ function ListItmeContainer(props) {
         marginBottom: 2,
       }}
     >
-      <ListItemText primary={props.item}></ListItemText>
-      <IconButton onClick={handleClick} size="small">
+      <ListItemText
+        primary={props.index + 1 + ". " + props.item.content}
+      ></ListItemText>
+      <IconButton onClick={() => handleClick(props.item.habitId)} size="small">
         <RemoveCircleOutlineIcon />
       </IconButton>
     </ListItem>

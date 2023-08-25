@@ -34,7 +34,7 @@ const theme = createTheme({
       contrastText: "#000",
     },
     item: {
-      light: "#b3c6e2",
+      light: "#d3e3fc",
       main: "#94b3ee",
     },
     title: {
@@ -44,23 +44,10 @@ const theme = createTheme({
   },
 });
 
-function addHabitHandler() {
-  axios.defaults.headers.common["Authorization"] =
-    localStorage.getItem("token");
-
-  axios
-    .get("/api/member/habit")
-    .then((response) => {
-      // 성공적인 응답 처리
-      console.log("Response:", response.data);
-    })
-    .catch((error) => {
-      // 에러 핸들링 및 로그인 페이지로 리디렉션
-      console.error("Error: ", error);
-    });
-}
-
 function MainPage() {
+  const [listPositiveHabits, setListPositiveHabits] = useState([]);
+  const [listNegativeHabits, setListNegativeHabits] = useState([]);
+
   const drawer = <SideBar title="Home" />;
   const container =
     window !== undefined ? () => window.document.body : undefined;
@@ -72,7 +59,7 @@ function MainPage() {
     setMobileOpen(!mobileOpen);
   };
 
-  const BoxRowStyle = styled("Box")({
+  const BoxRowStyle = styled("div")({
     display: "flex",
     justifyContent: "space-evenly",
     alignItems: "flex-start",
@@ -91,6 +78,10 @@ function MainPage() {
       .then((response) => {
         // 성공적인 응답 처리
         console.log("Response:", response.data);
+        setListPositiveHabits(response.data.data.positiveHabits);
+        setListNegativeHabits(response.data.data.negativeHabits);
+
+        console.log(listPositiveHabits);
       })
       .catch((error) => {
         // 에러 핸들링 및 로그인 페이지로 리디렉션
@@ -102,6 +93,60 @@ function MainPage() {
         }
       });
   }, []);
+
+  const addHabitHandler = (content, habitType) => {
+    axios.defaults.headers.common["Authorization"] =
+      localStorage.getItem("token");
+
+    const formData = {
+      content: content,
+      habitType: habitType,
+    };
+
+    const setListHabits =
+      habitType === "positive" ? setListPositiveHabits : setListNegativeHabits;
+    const listHabits =
+      habitType === "positive" ? listPositiveHabits : listNegativeHabits;
+
+    axios
+      .post("/api/habits", formData)
+      .then((response) => {
+        // 성공적인 응답 처리
+        setListHabits([...listHabits, response.data]);
+        console.log("Response:", response.data);
+      })
+      .catch((error) => {
+        // 에러 핸들링 및 로그인 페이지로 리디렉션
+        console.error("Error: ", error);
+      });
+  };
+
+  const deleteHabitHandler = (habitId, habitType) => {
+    console.log("haibtId = " + habitId + ", habitType = " + habitType);
+
+    axios.defaults.headers.common["Authorization"] =
+      localStorage.getItem("token");
+
+    const setListHabits =
+      habitType === "positive" ? setListPositiveHabits : setListNegativeHabits;
+    const listHabits =
+      habitType === "positive" ? listPositiveHabits : listNegativeHabits;
+
+    axios
+      .delete(`/api/habits/${habitId}`)
+      .then((response) => {
+        // 성공적인 응답 처리
+        const updatedList = listHabits.filter(
+          (item) => item.habitId !== habitId
+        );
+        setListHabits(updatedList);
+        console.log("Response:", response.data);
+      })
+      .catch((error) => {
+        // 에러 핸들링 및 로그인 페이지로 리디렉션
+        console.error("Error: ", error);
+      });
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -206,19 +251,27 @@ function MainPage() {
         <BoxRowStyle>
           <ThemeProvider theme={theme}>
             <HabitList
+              habitType="positive"
               title="Positive habits"
               titleColor="title.positive"
               subheader="add your habits to keep"
               background="primary.light"
               itemBackground="item.light"
+              listItems={listPositiveHabits}
+              addHabitHandler={addHabitHandler}
+              deleteHabitHandler={deleteHabitHandler}
             />
 
             <HabitList
+              habitType="negative"
               title="Negative habits"
               titleColor="title.negative"
               subheader="add your habits of discarding"
               background="primary.light"
               itemBackground="item.light"
+              listItems={listNegativeHabits}
+              addHabitHandler={addHabitHandler}
+              deleteHabitHandler={deleteHabitHandler}
             />
           </ThemeProvider>
         </BoxRowStyle>

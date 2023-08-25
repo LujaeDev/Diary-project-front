@@ -15,6 +15,50 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import HabitList from "../components/HabitList";
+import { styled } from "@mui/system";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      light: "#e3eaf0",
+      main: "#3e78e4",
+      dark: "#3937b6",
+      contrastText: "#fff",
+    },
+    secondary: {
+      light: "#ff7961",
+      main: "#f44336",
+      dark: "#ba000d",
+      contrastText: "#000",
+    },
+    item: {
+      light: "#b3c6e2",
+      main: "#94b3ee",
+    },
+    title: {
+      negative: "#f80000",
+      positive: "#0092f3",
+    },
+  },
+});
+
+function addHabitHandler() {
+  axios.defaults.headers.common["Authorization"] =
+    localStorage.getItem("token");
+
+  axios
+    .get("/api/member/habit")
+    .then((response) => {
+      // 성공적인 응답 처리
+      console.log("Response:", response.data);
+    })
+    .catch((error) => {
+      // 에러 핸들링 및 로그인 페이지로 리디렉션
+      console.error("Error: ", error);
+    });
+}
 
 function MainPage() {
   const drawer = <SideBar />;
@@ -27,6 +71,12 @@ function MainPage() {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const BoxRowStyle = styled("Box")({
+    display: "flex",
+    justifyContent: "space-evenly",
+    alignItems: "flex-start",
+  });
 
   const navigate = useNavigate();
 
@@ -135,6 +185,7 @@ function MainPage() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            marginBottom: 4,
           }}
         >
           <Avatar
@@ -151,6 +202,26 @@ function MainPage() {
             sx={{ width: "70%", height: "100%" }}
           />
         </Box>
+
+        <BoxRowStyle>
+          <ThemeProvider theme={theme}>
+            <HabitList
+              title="Positive habits"
+              titleColor="title.positive"
+              subheader="add your habits to keep"
+              background="primary.light"
+              itemBackground="item.light"
+            />
+
+            <HabitList
+              title="Negative habits"
+              titleColor="title.negative"
+              subheader="add your habits of discarding"
+              background="primary.light"
+              itemBackground="item.light"
+            />
+          </ThemeProvider>
+        </BoxRowStyle>
       </Box>
     </Box>
   );

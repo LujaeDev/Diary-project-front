@@ -14,7 +14,7 @@ import styled from "@emotion/styled";
 
 const StyledHorizontalContainer = styled(Box)`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 
@@ -22,11 +22,11 @@ function TodoList(props) {
   const [tasks, setTasks] = useState([]);
   const [taskText, setTaskText] = useState("");
 
-  const handleAddTask = () => {
-    if (taskText.trim() !== "") {
-      setTasks([...tasks, taskText]);
-      setTaskText("");
-    }
+  const addHandler = () => {
+    if (taskText.trim() === "") return;
+
+    props.handleAddTask(taskText);
+    setTaskText("");
   };
 
   const handleDeleteTask = (index) => {
@@ -48,16 +48,16 @@ function TodoList(props) {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleAddTask}
+          onClick={addHandler}
           sx={{ whiteSpace: "nowrap" }}
         >
           Add Task
         </Button>
       </StyledHorizontalContainer>
       <List>
-        {tasks.map((task, index) => (
+        {props.taskList.map((task, index) => (
           <ListItem key={index}>
-            <ListItemText primary={task} />
+            <ListItemText primary={index + 1 + ". " + task.content} />
             <ListItemSecondaryAction>
               <IconButton
                 edge="end"

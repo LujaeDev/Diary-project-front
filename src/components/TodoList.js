@@ -11,6 +11,10 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import styled from "@emotion/styled";
+import Checkbox from "@mui/material/Checkbox";
+import Divider from "@mui/material/Divider";
+
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const StyledHorizontalContainer = styled(Box)`
   display: flex;
@@ -56,18 +60,22 @@ function TodoList(props) {
       </StyledHorizontalContainer>
       <List>
         {props.taskList.map((task, index) => (
-          <ListItem key={index}>
-            <ListItemText primary={index + 1 + ". " + task.content} />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => handleDeleteTask(index)}
-              >
-                <Delete />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+          <div>
+            <ListItem key={index}>
+              <Checkbox {...label} />
+              <ListItemText primary={index + 1 + ". " + task.content} />
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => handleDeleteTask(index)}
+                >
+                  <Delete />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider />
+          </div>
         ))}
       </List>
     </Box>

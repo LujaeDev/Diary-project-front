@@ -6,38 +6,37 @@ import { Box } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Card from "@mui/material/Card";
+import dayjs from "dayjs";
 
 const StyledHorizontalContainer = styled(Box)`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
 `;
 
-function currentDate() {
-  var ret = new Date();
-
-  var year = ret.getFullYear();
-  var month = String(ret.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 1을 더함
-  var day = String(ret.getDate()).padStart(2, "0");
-
-  // yyyy-mm-dd 형식으로 포맷팅
-  var formattedDate = year + "-" + month + "-" + day;
-
-  return formattedDate;
-}
-
 function DailyTaskPage() {
-  const date = currentDate();
+  const [date, setDate] = useState(dayjs());
   const [taskList, setTaskList] = useState([]);
 
   const navigate = useNavigate();
+
+  const convertToStringDate = (date) => {
+    const year = date.year(); // 연도 추출
+    const month = String(date.month() + 1).padStart(2, "0"); // 월 추출 (0부터 시작하므로 1을 더해줍니다)
+    const day = String(date.date()).padStart(2, "0"); // 일 추출
+
+    const formattedDate = `${year}-${month}-${day}`; // 원하는 형식으로 문자열 생성
+
+    return formattedDate;
+  };
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] =
       localStorage.getItem("token");
     // Axios GET 요청 보내기
 
-    let uri = "/api/tasks?date=" + date;
+    let uri = "/api/tasks?date=" + convertToStringDate(date);
     const encodedURI = encodeURI(uri);
     axios
       .get(encodedURI, { headers: { Accept: "application/json" } })
@@ -55,16 +54,16 @@ function DailyTaskPage() {
           navigate("/"); // '/login'은 로그인 페이지의 경로로 수정해야 합니다.
         }
       });
-  }, []);
+  }, [date]);
 
-  const handleAddTask = (taskContent) => {
-    const date = currentDate();
+  const addTaskHandler = (taskContent) => {
+    const stringDate = convertToStringDate(date);
     const formData = {
       content: taskContent,
       success: false,
       startTime: null,
       endTime: null,
-      date: date,
+      date: stringDate,
     };
 
     console.log(formData);
@@ -73,7 +72,7 @@ function DailyTaskPage() {
       .post(uri, formData)
       .then((response) => {
         // 성공적인 응답 처리
-        setTaskList([...taskList, formData]);
+        setTaskList([...taskList, response.data]);
         console.log("Response:", response.data);
       })
       .catch((error) => {
@@ -87,12 +86,40 @@ function DailyTaskPage() {
       });
   };
 
+  const dateChangeHanlder = (inputDate) => {
+    setDate(inputDate);
+  };
+
+  const deleteTaskHandler = (taskId) => {
+    console.log("taskId = " + taskId);
+
+    axios.defaults.headers.common["Authorization"] =
+      localStorage.getItem("token");
+
+    axios
+      .delete(`/api/tasks/${taskId}`)
+      .then((response) => {
+        // 성공적인 응답 처리
+        const updatedList = taskList.filter((item) => item.taskId !== taskId);
+
+        setTaskList(updatedList);
+        console.log("Response:", response.data);
+      })
+      .catch((error) => {
+        // 에러 핸들링 및 로그인 페이지로 리디렉션
+        console.error("Error: ", error);
+      });
+  };
+
   const content = (
     <StyledHorizontalContainer>
-      <BasicDateCalendar sx={{ flex: "2 1 0" }} />
+      <Card variant="outlined" sx={{ flex: "2 1 0", marginTop: 4 }}>
+        <BasicDateCalendar value={date} changeHandler={dateChangeHanlder} />
+      </Card>
       <TodoList
-        sx={{ flex: "3 1 0", marginTop: 4 }}
-        handleAddTask={handleAddTask}
+        sx={{ flex: "3 1 0", marginTop: 4, marginLeft: 4 }}
+        handleAddTask={addTaskHandler}
+        handleDeleteTask={deleteTaskHandler}
         taskList={taskList}
       />
     </StyledHorizontalContainer>

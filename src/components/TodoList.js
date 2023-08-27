@@ -23,7 +23,6 @@ const StyledHorizontalContainer = styled(Box)`
 `;
 
 function TodoList(props) {
-  const [tasks, setTasks] = useState([]);
   const [taskText, setTaskText] = useState("");
 
   const addHandler = () => {
@@ -33,10 +32,19 @@ function TodoList(props) {
     setTaskText("");
   };
 
-  const handleDeleteTask = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
-  };
+  // const checkHandler = (id) => {
+  //   console.log(listTaskSuccess);
+
+  //   const updatedList = listTaskSuccess.map(({ taskId, success }) => {
+  //     if (taskId === id) {
+  //       return { taskId: taskId, success: !success };
+  //     } else {
+  //       return { taskId: taskId, success: success };
+  //     }
+  //   });
+  //   console.log(updatedList);
+  //   setListTaskSuccess(updatedList);
+  // };
 
   return (
     <Box sx={props.sx}>
@@ -60,15 +68,22 @@ function TodoList(props) {
       </StyledHorizontalContainer>
       <List>
         {props.taskList.map((task, index) => (
-          <div>
-            <ListItem key={index}>
+          <div key={index}>
+            <ListItem>
               <Checkbox {...label} />
-              <ListItemText primary={index + 1 + ". " + task.content} />
+              <ListItemText
+                primary={index + 1 + ". " + task.content}
+                style={{
+                  textDecoration: task.success ? "line-through" : "none",
+                }}
+              />
               <ListItemSecondaryAction>
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={() => handleDeleteTask(index)}
+                  onClick={() => {
+                    props.handleDeleteTask(task.taskId);
+                  }}
                 >
                   <Delete />
                 </IconButton>

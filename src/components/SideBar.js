@@ -30,6 +30,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import { Link, Navigate } from "react-router-dom";
+import { Container } from "@mui/material";
 
 const drawerWidth = 250;
 
@@ -208,7 +209,7 @@ function SideBar(props) {
         }}
       >
         <Toolbar />
-        {props.content}
+        <Container>{props.content}</Container>
       </Box>
     </Box>
   );

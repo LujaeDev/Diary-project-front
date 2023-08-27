@@ -1,6 +1,7 @@
 import { ListItem, ListItemText } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { IconButton } from "@mui/material";
+import { Delete } from "@mui/icons-material";
 
 function ListItmeContainer(props) {
   const handleClick = (index) => {
@@ -24,7 +25,7 @@ function ListItmeContainer(props) {
         primary={props.index + 1 + ". " + props.item.content}
       ></ListItemText>
       <IconButton onClick={() => handleClick(props.item.habitId)} size="small">
-        <RemoveCircleOutlineIcon sx={{ fontSize: 20 }} />
+        <Delete sx={{ fontSize: 20 }} />
       </IconButton>
     </ListItem>
   );

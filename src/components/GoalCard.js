@@ -20,14 +20,12 @@ const BoxRowStyle = styled("div")({
 });
 
 function GoalCard(props) {
-  const [listGoals, setListGoals] = useState([]);
   const [inputText, setInputText] = useState("");
 
   const addHandler = () => {
-    console.log(listGoals);
-    setListGoals([...listGoals, inputText]);
-    console.log(listGoals);
-    setInputText("");
+    if (inputText.length === 0) return;
+
+    props.addHandler(props.title.toLowerCase(), inputText);
   };
 
   const changeTextHandler = (event) => {
@@ -53,8 +51,13 @@ function GoalCard(props) {
         </Typography>
 
         <List>
-          {listGoals.map((item, index) => (
-            <AnnualGoalContainer item={item} index={index} key={index} />
+          {props.listGoals.map((item, index) => (
+            <AnnualGoalContainer
+              item={item}
+              index={index}
+              key={index}
+              deleteHandler={props.deleteHandler}
+            />
           ))}
         </List>
 

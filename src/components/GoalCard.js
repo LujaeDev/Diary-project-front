@@ -53,9 +53,10 @@ function GoalCard(props) {
         <List>
           {props.listGoals.map((item, index) => (
             <AnnualGoalContainer
-              item={item.content}
+              item={item}
               index={index}
               key={index}
+              deleteHandler={props.deleteHandler}
             />
           ))}
         </List>

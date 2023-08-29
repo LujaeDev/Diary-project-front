@@ -6,8 +6,6 @@ import { Box } from "@mui/material";
 import dayjs from "dayjs";
 
 export default function BasicDateCalendar(props) {
-  const [value, setValue] = React.useState(dayjs("2023-08-27"));
-
   return (
     <Box sx={props.sx}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -68,7 +68,7 @@ function AnnualGoalPage() {
   const addGoalHandler = (goalCategory, goalContent) => {
     const year = selectedDate === null ? 2023 : selectedDate.$y;
 
-    var categoryObj = categoryList.filter((item) => {
+    const categoryObj = categoryList.filter((item) => {
       return item.category === goalCategory;
     })[0];
 
@@ -98,6 +98,33 @@ function AnnualGoalPage() {
       });
   };
 
+  const deleteGoalHandler = (goalCategory, goalId) => {
+    console.log("goalId = " + goalId);
+
+    const categoryObj = categoryList.filter((item) => {
+      return item.category === goalCategory;
+    })[0];
+
+    axios.defaults.headers.common["Authorization"] =
+      localStorage.getItem("token");
+
+    axios
+      .delete(`/api/annualGoals/${goalId}`)
+      .then((response) => {
+        // 성공적인 응답 처리
+        const updatedList = categoryObj.list.filter(
+          (item) => item.annualGoalId !== goalId
+        );
+
+        categoryObj.setList(updatedList);
+        console.log("Response:", response.data);
+      })
+      .catch((error) => {
+        // 에러 핸들링 및 로그인 페이지로 리디렉션
+        console.error("Error: ", error);
+      });
+  };
+
   const content = (
     <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -117,11 +144,13 @@ function AnnualGoalPage() {
           listGoals={careerList}
           title="Career"
           addHandler={addGoalHandler}
+          deleteHandler={deleteGoalHandler}
         />
         <GoalCard
           listGoals={healthList}
           title="Health"
           addHandler={addGoalHandler}
+          deleteHandler={deleteGoalHandler}
         />
       </BoxRowStyle>
 
@@ -130,11 +159,13 @@ function AnnualGoalPage() {
           listGoals={familyList}
           title="Family"
           addHandler={addGoalHandler}
+          deleteHandler={deleteGoalHandler}
         />
         <GoalCard
           listGoals={financeList}
           title="Finance"
           addHandler={addGoalHandler}
+          deleteHandler={deleteGoalHandler}
         />
       </BoxRowStyle>
     </div>

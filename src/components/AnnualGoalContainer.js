@@ -11,6 +11,13 @@ function AnnualGoalContainer(props) {
     alignItems: "center",
   });
 
+  const handleClick = (goalId) => {
+    console.log("click category: " + props.item.category);
+    console.log("click goalId: " + goalId);
+
+    props.deleteHandler(props.item.category, goalId);
+  };
+
   return (
     <div>
       <BoxRowStyle>
@@ -23,7 +30,7 @@ function AnnualGoalContainer(props) {
         >
           <ListItemText sx={{ fontWeight: 400 }}>
             <Typography fontSize={14} fontWeight={"bold"}>
-              {props.index + 1 + ". " + props.item}
+              {props.index + 1 + ". " + props.item.content}
             </Typography>
           </ListItemText>
           <IconButton
@@ -36,6 +43,7 @@ function AnnualGoalContainer(props) {
                 color: "black",
               },
             }}
+            onClick={() => handleClick(props.item.annualGoalId)}
           >
             <Delete
               sx={{

@@ -87,7 +87,11 @@ function SideBar(props) {
       nestedItems: [
         { icon: <StarBorderPurple500TwoToneIcon />, primary: "Weekly Goal" },
         { icon: <StarBorderPurple500TwoToneIcon />, primary: "Monthly Goal" },
-        { icon: <StarBorderPurple500TwoToneIcon />, primary: "Annual Goal" },
+        {
+          icon: <StarBorderPurple500TwoToneIcon />,
+          primary: "Annual Goal",
+          ref: "/annualGoal",
+        },
       ],
     },
     { icon: <ModeIcon />, primary: "Diary" },
@@ -120,10 +124,15 @@ function SideBar(props) {
               <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {item.nestedItems.map((nestedItem, nestedIndex) => (
-                    <ListItemButton key={nestedIndex} sx={{ pl: 4 }}>
-                      <ListItemIcon>{nestedItem.icon}</ListItemIcon>
-                      <ListItemText primary={nestedItem.primary} />
-                    </ListItemButton>
+                    <Link
+                      to={nestedItem.ref}
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      <ListItemButton key={nestedIndex} sx={{ pl: 4 }}>
+                        <ListItemIcon>{nestedItem.icon}</ListItemIcon>
+                        <ListItemText primary={nestedItem.primary} />
+                      </ListItemButton>
+                    </Link>
                   ))}
                 </List>
               </Collapse>

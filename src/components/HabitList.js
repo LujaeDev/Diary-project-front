@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, List, ListItem, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 
 import CardContent from "@mui/material/CardContent";
@@ -39,9 +46,13 @@ function HabitList(props) {
     >
       <CardContent>
         <CardHeader
-          title={props.title}
+          title={
+            <Typography variant="h4" fontWeight="bold">
+              {props.title}
+            </Typography>
+          }
           subheader={props.subheader}
-          sx={{ color: props.titleColor }}
+          sx={{ color: props.titleColor, fontWeight: "bold" }}
         />
         <div>
           <Card

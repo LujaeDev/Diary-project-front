@@ -23,7 +23,7 @@ const theme = createTheme({
   palette: {
     primary: {
       light: "#e3eaf0",
-      main: "#3e78e4",
+      main: "#2743cc",
       dark: "#3937b6",
       contrastText: "#fff",
     },
@@ -34,8 +34,8 @@ const theme = createTheme({
       contrastText: "#000",
     },
     item: {
-      light: "#d3e3fc",
-      main: "#94b3ee",
+      light: "#3e7af2",
+      main: "#4e43e7",
     },
     title: {
       negative: "#f80000",

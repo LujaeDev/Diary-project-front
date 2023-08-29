@@ -18,25 +18,33 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const StyledHorizontalContainer = styled(Box)`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 
 function TodoList(props) {
-  const [tasks, setTasks] = useState([]);
   const [taskText, setTaskText] = useState("");
 
-  const handleAddTask = () => {
-    if (taskText.trim() !== "") {
-      setTasks([...tasks, taskText]);
-      setTaskText("");
-    }
+  const addHandler = () => {
+    if (taskText.trim() === "") return;
+
+    props.handleAddTask(taskText);
+    setTaskText("");
   };
 
-  const handleDeleteTask = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
-  };
+  // const checkHandler = (id) => {
+  //   console.log(listTaskSuccess);
+
+  //   const updatedList = listTaskSuccess.map(({ taskId, success }) => {
+  //     if (taskId === id) {
+  //       return { taskId: taskId, success: !success };
+  //     } else {
+  //       return { taskId: taskId, success: success };
+  //     }
+  //   });
+  //   console.log(updatedList);
+  //   setListTaskSuccess(updatedList);
+  // };
 
   return (
     <Box sx={props.sx}>
@@ -52,23 +60,30 @@ function TodoList(props) {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleAddTask}
+          onClick={addHandler}
           sx={{ whiteSpace: "nowrap" }}
         >
           Add Task
         </Button>
       </StyledHorizontalContainer>
       <List>
-        {tasks.map((task, index) => (
-          <div>
-            <ListItem key={index}>
+        {props.taskList.map((task, index) => (
+          <div key={index}>
+            <ListItem>
               <Checkbox {...label} />
-              <ListItemText primary={task} />
+              <ListItemText
+                primary={index + 1 + ". " + task.content}
+                style={{
+                  textDecoration: task.success ? "line-through" : "none",
+                }}
+              />
               <ListItemSecondaryAction>
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={() => handleDeleteTask(index)}
+                  onClick={() => {
+                    props.handleDeleteTask(task.taskId);
+                  }}
                 >
                   <Delete />
                 </IconButton>

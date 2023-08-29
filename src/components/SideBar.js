@@ -30,6 +30,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import { Link, Navigate } from "react-router-dom";
+import { Container } from "@mui/material";
 
 const drawerWidth = 250;
 
@@ -86,7 +87,11 @@ function SideBar(props) {
       nestedItems: [
         { icon: <StarBorderPurple500TwoToneIcon />, primary: "Weekly Goal" },
         { icon: <StarBorderPurple500TwoToneIcon />, primary: "Monthly Goal" },
-        { icon: <StarBorderPurple500TwoToneIcon />, primary: "Annual Goal" },
+        {
+          icon: <StarBorderPurple500TwoToneIcon />,
+          primary: "Annual Goal",
+          ref: "/annualGoal",
+        },
       ],
     },
     { icon: <ModeIcon />, primary: "Diary" },
@@ -119,10 +124,15 @@ function SideBar(props) {
               <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {item.nestedItems.map((nestedItem, nestedIndex) => (
-                    <ListItemButton key={nestedIndex} sx={{ pl: 4 }}>
-                      <ListItemIcon>{nestedItem.icon}</ListItemIcon>
-                      <ListItemText primary={nestedItem.primary} />
-                    </ListItemButton>
+                    <Link
+                      to={nestedItem.ref}
+                      style={{ color: "inherit", textDecoration: "none" }}
+                    >
+                      <ListItemButton key={nestedIndex} sx={{ pl: 4 }}>
+                        <ListItemIcon>{nestedItem.icon}</ListItemIcon>
+                        <ListItemText primary={nestedItem.primary} />
+                      </ListItemButton>
+                    </Link>
                   ))}
                 </List>
               </Collapse>
@@ -208,7 +218,7 @@ function SideBar(props) {
         }}
       >
         <Toolbar />
-        {props.content}
+        <Container>{props.content}</Container>
       </Box>
     </Box>
   );

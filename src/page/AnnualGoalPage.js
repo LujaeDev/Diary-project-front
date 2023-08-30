@@ -8,6 +8,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 function AnnualGoalPage() {
   const BoxRowStyle = styled("div")({
@@ -17,7 +18,7 @@ function AnnualGoalPage() {
   });
 
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(moment());
   const [careerList, setCarrerList] = useState([]);
   const [healthList, setHealthList] = useState([]);
   const [familyList, setFamilyList] = useState([]);
@@ -39,7 +40,8 @@ function AnnualGoalPage() {
       const category = item.category;
       const setList = item.setList;
 
-      const year = selectedDate === null ? 2023 : selectedDate.$y;
+      const year =
+        selectedDate instanceof moment ? selectedDate.year() : selectedDate.$y;
       let uri = "/api/annualGoals?year=" + year + "&category=" + category;
       const encodedURI = encodeURI(uri);
       axios
@@ -173,7 +175,7 @@ function AnnualGoalPage() {
 
   return (
     <div>
-      <SideBar title="AnnualGoal" content={content} />
+      <SideBar title="Annual Goal" content={content} />
     </div>
   );
 }

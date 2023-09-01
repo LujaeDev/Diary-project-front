@@ -9,6 +9,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import dayjs from "dayjs";
 
 function AnnualGoalPage() {
   const BoxRowStyle = styled("div")({
@@ -18,7 +19,7 @@ function AnnualGoalPage() {
   });
 
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(moment());
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   const [careerList, setCarrerList] = useState([]);
   const [healthList, setHealthList] = useState([]);
   const [familyList, setFamilyList] = useState([]);
@@ -42,7 +43,7 @@ function AnnualGoalPage() {
 
       const year =
         selectedDate instanceof moment ? selectedDate.year() : selectedDate.$y;
-      let uri = "/api/annualGoals?year=" + year + "&category=" + category;
+      let uri = "/api/annualGoals/" + year + "/" + category;
       const encodedURI = encodeURI(uri);
       axios
         .get(encodedURI, { headers: { Accept: "application/json" } })
@@ -68,7 +69,8 @@ function AnnualGoalPage() {
   };
 
   const addGoalHandler = (goalCategory, goalContent) => {
-    const year = selectedDate === null ? 2023 : selectedDate.$y;
+    const year =
+      selectedDate instanceof moment ? selectedDate.year() : selectedDate.$y;
 
     const categoryObj = categoryList.filter((item) => {
       return item.category === goalCategory;
@@ -147,12 +149,14 @@ function AnnualGoalPage() {
           title="Career"
           addHandler={addGoalHandler}
           deleteHandler={deleteGoalHandler}
+          goalType="Annual Goal"
         />
         <GoalCard
           listGoals={healthList}
           title="Health"
           addHandler={addGoalHandler}
           deleteHandler={deleteGoalHandler}
+          goalType="Annual Goal"
         />
       </BoxRowStyle>
 
@@ -162,12 +166,14 @@ function AnnualGoalPage() {
           title="Family"
           addHandler={addGoalHandler}
           deleteHandler={deleteGoalHandler}
+          goalType="Annual Goal"
         />
         <GoalCard
           listGoals={financeList}
           title="Finance"
           addHandler={addGoalHandler}
           deleteHandler={deleteGoalHandler}
+          goalType="Annual Goal"
         />
       </BoxRowStyle>
     </div>

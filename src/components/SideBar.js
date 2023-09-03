@@ -86,7 +86,11 @@ function SideBar(props) {
       primary: "Goal",
       nestedItems: [
         { icon: <StarBorderPurple500TwoToneIcon />, primary: "Weekly Goal" },
-        { icon: <StarBorderPurple500TwoToneIcon />, primary: "Monthly Goal" },
+        {
+          icon: <StarBorderPurple500TwoToneIcon />,
+          primary: "Monthly Goal",
+          ref: "/monthlyGoal",
+        },
         {
           icon: <StarBorderPurple500TwoToneIcon />,
           primary: "Annual Goal",

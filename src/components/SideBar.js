@@ -31,6 +31,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import { Link, Navigate } from "react-router-dom";
 import { Container } from "@mui/material";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 
 const drawerWidth = 250;
 
@@ -56,7 +57,8 @@ const darkTheme = createTheme({
 });
 
 function SideBar(props) {
-  const [open, setOpen] = React.useState(true);
+  const [open1, setOpen1] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -65,8 +67,13 @@ function SideBar(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleClick = () => {
-    setOpen(!open);
+  const handleClick = (event) => {
+    const target = event.currentTarget;
+
+    const text = target.innerText;
+
+    if (text === "Goal") setOpen1(!open1);
+    if (text === "Archive") setOpen2(!open2);
   };
 
   const hanldeHomeBtn = () => {
@@ -86,22 +93,32 @@ function SideBar(props) {
       primary: "Goal",
       nestedItems: [
         { icon: <StarBorderPurple500TwoToneIcon />, primary: "Weekly Goal" },
-        { icon: <StarBorderPurple500TwoToneIcon />, primary: "Monthly Goal" },
+        {
+          icon: <StarBorderPurple500TwoToneIcon />,
+          primary: "Monthly Goal",
+          ref: "/monthlyGoal",
+        },
         {
           icon: <StarBorderPurple500TwoToneIcon />,
           primary: "Annual Goal",
           ref: "/annualGoal",
         },
       ],
+      open: open1,
     },
-    { icon: <ModeIcon />, primary: "Diary" },
+    {
+      icon: <LocalLibraryIcon />,
+      primary: "Archive",
+      nestedItems: [{ icon: <ModeIcon />, primary: "Diary", ref: "/diary" }],
+      open: open2,
+    },
     { icon: <CalendarMonthIcon />, primary: "Calendar" },
   ];
 
   const drawer = (
     <div style={{ height: "100%" }}>
       <AppBar position="static" color="primary">
-        {appBarLabel("Mind Archvive")}
+        {appBarLabel("Mind Archive")}
       </AppBar>
       <Divider />
       <List>
@@ -116,12 +133,13 @@ function SideBar(props) {
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.primary} />
-                {item.nestedItems && (open ? <ExpandLess /> : <ExpandMore />)}
+                {item.nestedItems &&
+                  (item.open ? <ExpandLess /> : <ExpandMore />)}
               </ListItemButton>
             </Link>
 
             {item.nestedItems && (
-              <Collapse in={open} timeout="auto" unmountOnExit>
+              <Collapse in={item.open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {item.nestedItems.map((nestedItem, nestedIndex) => (
                     <Link

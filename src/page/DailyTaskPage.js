@@ -31,6 +31,20 @@ function DailyTaskPage() {
     return formattedDate;
   };
 
+  // const checkHandler = (id) => {
+  //   console.log(listTaskSuccess);
+
+  //   const updatedList = listTaskSuccess.map(({ taskId, success }) => {
+  //     if (taskId === id) {
+  //       return { taskId: taskId, success: !success };
+  //     } else {
+  //       return { taskId: taskId, success: success };
+  //     }
+  //   });
+  //   console.log(updatedList);
+  //   setListTaskSuccess(updatedList);
+  // };
+
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] =
       localStorage.getItem("token");
@@ -127,7 +141,7 @@ function DailyTaskPage() {
 
   return (
     <div>
-      <SideBar title="DailyTask" content={content} />
+      <SideBar title="Daily Task" content={content} />
     </div>
   );
 }

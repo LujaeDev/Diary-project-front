@@ -20,7 +20,9 @@ export default function ViewDiaryModal(props) {
 
   const navigate = useNavigate();
 
-  const handleClose = () => {
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+
     console.log("here");
     props.closeHandler();
     setOpen(false);
@@ -77,6 +79,11 @@ export default function ViewDiaryModal(props) {
         }
       });
   }, [open]);
+
+  const handleBackdropClick = (e) => {
+    // 모달 바깥 영역 클릭 이벤트를 무시하도록 합니다.
+    e.stopPropagation();
+  };
 
   return (
     <div>

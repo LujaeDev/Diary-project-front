@@ -16,7 +16,9 @@ export default function AddDiaryModal(props) {
 
   const [scroll, setScroll] = React.useState("paper");
 
-  const handleClose = () => {
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+
     console.log("here");
     props.closeHandler();
     setOpen(false);

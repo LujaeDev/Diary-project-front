@@ -19,7 +19,7 @@ function AnnualGoalContainer(props) {
   };
 
   return (
-    <div>
+    <div style={{ marginBottom: 4 }}>
       <BoxRowStyle>
         <ListItem
           key={props.index}

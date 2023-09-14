@@ -5,6 +5,8 @@ import SignUpPage from "./page/SignUpPage";
 import MainPage from "./page/MainPage";
 import DailyTaskPage from "./page/DailyTaskPage";
 import AnnualGoalPage from "./page/AnnualGoalPage";
+import MonthlyGoalPage from "./page/MonthlyGoalPage";
+import DiaryPage from "./page/DiaryPage";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/main" Component={MainPage} />
         <Route path="/dailyTask" Component={DailyTaskPage} />
         <Route path="/annualGoal" Component={AnnualGoalPage} />
+        <Route path="/monthlyGoal" Component={MonthlyGoalPage} />
+        <Route path="/diary" Component={DiaryPage} />
       </Routes>
     </Router>
   );

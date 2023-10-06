@@ -167,7 +167,7 @@ function DiaryPage() {
     console.log(localStorage.getItem("token"));
     // Axios GET 요청 보내기
 
-    const uri = "/api/diaries/" + "/date/" + convertToStringDate(date);
+    const uri = "/api/diaries/" + "date/" + convertToStringDate(date);
     const encodedURI = encodeURI(uri);
 
     axios

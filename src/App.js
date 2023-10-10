@@ -7,6 +7,9 @@ import DailyTaskPage from "./page/DailyTaskPage";
 import AnnualGoalPage from "./page/AnnualGoalPage";
 import MonthlyGoalPage from "./page/MonthlyGoalPage";
 import DiaryPage from "./page/DiaryPage";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:8080";
 
 function App() {
   return (
